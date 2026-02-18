@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: Search Service API
+  version: 1.0.0
+  description: Search customers using Elasticsearch.
+
+servers:
+  - url: http://localhost:8081
+
+paths:
+
+  /search/customers:
+    get:
+      summary: Search customers
+      operationId: searchCustomers
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+        - in: query
+          name: email
+          schema:
+            type: string
+        - in: query
+          name: phone
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: size
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+components:
+  schemas:
+    SearchResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchCustomer'
+
+    SearchCustomer:
+      type: object
+      properties:
+        customerId: { type: string, format: uuid }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        customerType: { type: string }

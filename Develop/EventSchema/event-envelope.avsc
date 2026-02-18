@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "EventEnvelope",
+  "namespace": "cdp.events",
+  "fields": [
+    { "name": "eventId", "type": "string" },
+    { "name": "eventType", "type": { "type": "enum", "name": "EventType", "symbols": ["CREATED", "UPDATED", "DELETED"] }},
+    { "name": "entityType", "type": "string" },
+    { "name": "entityId", "type": "string" },
+    { "name": "source", "type": "string" },
+    { "name": "timestamp", "type": "long" },
+    { "name": "traceId", "type": ["null", "string"], "default": null },
+    { "name": "payload", "type": "bytes" }
+  ]
+}

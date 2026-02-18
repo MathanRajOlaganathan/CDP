@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "Customer",
+  "namespace": "cdp.customer",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "customerType", "type": { "type": "enum", "name": "CustomerType", "symbols": ["PERSON", "COMPANY"] }},
+    { "name": "isArchived", "type": "boolean" },
+    { "name": "createdAt", "type": "string" },
+    { "name": "updatedAt", "type": "string" }
+  ]
+}

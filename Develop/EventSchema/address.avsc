@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "Address",
+  "namespace": "cdp.address",
+  "fields": [
+    { "name": "addressId", "type": "string" },
+    { "name": "customerId", "type": "string" },
+    { "name": "type", "type": "string" },
+    { "name": "line1", "type": "string" },
+    { "name": "line2", "type": ["null", "string"], "default": null },
+    { "name": "city", "type": "string" },
+    { "name": "state", "type": ["null", "string"], "default": null },
+    { "name": "country", "type": "string" },
+    { "name": "postalCode", "type": ["null", "string"], "default": null },
+    { "name": "isPrimary", "type": "boolean" }
+  ]
+}

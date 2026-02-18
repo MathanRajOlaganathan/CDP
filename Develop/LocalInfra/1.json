@@ -1,0 +1,274 @@
+[
+    {
+        "Id": "f8305569fef17151ceeb427f5011c523643c207d488121b1092215b59099df9a",
+        "Created": "2026-02-05T20:51:27.191707794Z",
+        "Path": "/etc/confluent/docker/run",
+        "Args": [],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 90458,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-02-05T20:51:27.619364544Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:d23d8440708bb44daad5cba4195c070b9713c126375b355afb5ffedf7f1b94e7",
+        "ResolvConfPath": "/var/lib/docker/containers/f8305569fef17151ceeb427f5011c523643c207d488121b1092215b59099df9a/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/f8305569fef17151ceeb427f5011c523643c207d488121b1092215b59099df9a/hostname",
+        "HostsPath": "/var/lib/docker/containers/f8305569fef17151ceeb427f5011c523643c207d488121b1092215b59099df9a/hosts",
+        "LogPath": "/var/lib/docker/containers/f8305569fef17151ceeb427f5011c523643c207d488121b1092215b59099df9a/f8305569fef17151ceeb427f5011c523643c207d488121b1092215b59099df9a-json.log",
+        "Name": "/cdp-schema-registry",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "localinfra_default",
+            "PortBindings": {
+                "8081/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "8081"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": [],
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/acpi",
+                "/proc/asound",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/sys/devices/virtual/powercap",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "Storage": {
+            "RootFS": {
+                "Snapshot": {
+                    "Name": "overlayfs"
+                }
+            }
+        },
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "a04b0f89b9c56ac48c9e01b04dfcd4ec9426c9daeaf000dba26b448057bd7cf5",
+                "Source": "/var/lib/docker/volumes/a04b0f89b9c56ac48c9e01b04dfcd4ec9426c9daeaf000dba26b448057bd7cf5/_data",
+                "Destination": "/etc/schema-registry/secrets",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "f8305569fef1",
+            "Domainname": "",
+            "User": "appuser",
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "ExposedPorts": {
+                "8081/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081",
+                "SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=cdp-redpanda:9092",
+                "SCHEMA_REGISTRY_HOST_NAME=cdp-schema-registry",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "container=oci",
+                "LANG=C.UTF-8",
+                "CUB_CLASSPATH=\"/usr/share/java/kafka/*:/usr/share/java/cp-base-new/*\"",
+                "COMPONENT=schema-registry"
+            ],
+            "Cmd": [
+                "/etc/confluent/docker/run"
+            ],
+            "Image": "confluentinc/cp-schema-registry:7.6.0",
+            "Volumes": {
+                "/etc/schema-registry/secrets": {}
+            },
+            "WorkingDir": "/home/appuser",
+            "Entrypoint": null,
+            "Labels": {
+                "architecture": "aarch64",
+                "build-date": "2024-01-16T18:44:24",
+                "com.docker.compose.config-hash": "e9ef5f3aa980c9caca8a052abde6cd4bb9fc8a4593d1839e512b917a39bd109d",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.depends_on": "redpanda:service_started:false",
+                "com.docker.compose.image": "sha256:d23d8440708bb44daad5cba4195c070b9713c126375b355afb5ffedf7f1b94e7",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "localinfra",
+                "com.docker.compose.project.config_files": "/Users/matolaga/SDE/Java/CDP/Develop/LocalInfra/docker-compose.yaml",
+                "com.docker.compose.project.working_dir": "/Users/matolaga/SDE/Java/CDP/Develop/LocalInfra",
+                "com.docker.compose.service": "schema-registry",
+                "com.docker.compose.version": "5.0.1",
+                "com.redhat.component": "ubi8-minimal-container",
+                "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+                "description": "Confluent Schema Registry provides a RESTful interface for developers to define standard schemas for their events, share them across the organization and safely evolve them in a way that is backward compatible and future proof.",
+                "distribution-scope": "public",
+                "io.buildah.version": "1.29.0",
+                "io.confluent.docker": "true",
+                "io.confluent.docker.build.number": "6",
+                "io.confluent.docker.git.id": "f56e9d75",
+                "io.confluent.docker.git.repo": "confluentinc/schema-registry-images",
+                "io.k8s.description": "The Universal Base Image Minimal is a stripped down image that uses microdnf as a package manager. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.",
+                "io.k8s.display-name": "Red Hat Universal Base Image 8 Minimal",
+                "io.openshift.expose-services": "",
+                "io.openshift.tags": "minimal rhel8",
+                "maintainer": "partner-support@confluent.io",
+                "name": "cp-schema-registry",
+                "release": "7.6.0",
+                "summary": "Confluent Schema Registry provides a RESTful interface for developers to define standard schemas for their events, share them across the organization and safely evolve them in a way that is backward compatible and future proof.",
+                "url": "https://access.redhat.com/containers/#/registry.access.redhat.com/ubi8-minimal/images/8.9-1108.1705420507",
+                "vcs-ref": "7e7670a8c8c9a3be83beaa2787f3703b404d4a1d",
+                "vcs-type": "git",
+                "vendor": "Confluent",
+                "version": "f56e9d75"
+            },
+            "StopTimeout": 1
+        },
+        "NetworkSettings": {
+            "SandboxID": "462e3a0569613aa09a6a0c900c19ad24edc43d249e55e4f3217c478f9f53008d",
+            "SandboxKey": "/var/run/docker/netns/462e3a056961",
+            "Ports": {
+                "8081/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "8081"
+                    },
+                    {
+                        "HostIp": "::",
+                        "HostPort": "8081"
+                    }
+                ]
+            },
+            "Networks": {
+                "localinfra_default": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "cdp-schema-registry",
+                        "schema-registry"
+                    ],
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "ca48c2ec27157c17cd1862eb3e1ec12f008887ff71eaaadef7f3981499195bcb",
+                    "EndpointID": "dfa7c1ea816a8ce781e1f93951d1c08a6200a495006f17bf88f40260998918fe",
+                    "Gateway": "172.18.0.1",
+                    "IPAddress": "172.18.0.7",
+                    "MacAddress": "0e:13:88:a3:6e:cc",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": [
+                        "cdp-schema-registry",
+                        "schema-registry",
+                        "f8305569fef1"
+                    ]
+                }
+            }
+        },
+        "ImageManifestDescriptor": {
+            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+            "digest": "sha256:b9c5a18a9df633960b986cb194461d825776f4e5205ce712d92ed48097959861",
+            "size": 2626,
+            "platform": {
+                "architecture": "arm64",
+                "os": "linux"
+            }
+        }
+    }
+]

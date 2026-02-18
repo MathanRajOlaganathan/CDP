@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "LoginMetadata",
+  "namespace": "cdp.login",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "lastLoginAt", "type": "string" },
+    { "name": "ipAddress", "type": ["null", "string"], "default": null },
+    { "name": "device", "type": ["null", "string"], "default": null }
+  ]
+}

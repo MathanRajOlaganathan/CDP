@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "PersonDetail",
+  "namespace": "cdp.person",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "firstName", "type": "string" },
+    { "name": "lastName", "type": "string" },
+    { "name": "dateOfBirth", "type": ["null", "string"], "default": null },
+    { "name": "nationalId", "type": ["null", "string"], "default": null },
+    { "name": "gender", "type": ["null", "string"], "default": null },
+    { "name": "citizenship", "type": ["null", "string"], "default": null }
+  ]
+}

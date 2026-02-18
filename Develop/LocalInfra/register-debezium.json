@@ -1,0 +1,17 @@
+{
+  "name": "postgres-cdc",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "admin",
+    "database.password": "admin",
+    "database.dbname": "customer360",
+    "database.server.name": "customer360",
+    "plugin.name": "pgoutput",
+    "slot.name": "customer360_slot",
+    "publication.name": "customer360_pub",
+    "table.include.list": "public.customer,public.address,public.contact_detail,public.kyc,public.portfolio",
+    "tombstones.on.delete": "false"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "Kyc",
+  "namespace": "cdp.kyc",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "kycLevel", "type": "string" },
+    { "name": "status", "type": "string" },
+    { "name": "lastVerifiedAt", "type": ["null", "string"], "default": null },
+    { "name": "remarks", "type": ["null", "string"], "default": null }
+  ]
+}

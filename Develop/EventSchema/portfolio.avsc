@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "Portfolio",
+  "namespace": "cdp.portfolio",
+  "fields": [
+    { "name": "portfolioId", "type": "string" },
+    { "name": "customerId", "type": "string" },
+    { "name": "portfolioType", "type": "string" },
+    { "name": "status", "type": "string" },
+    { "name": "riskProfile", "type": ["null", "string"], "default": null }
+  ]
+}

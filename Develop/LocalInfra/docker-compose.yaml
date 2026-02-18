@@ -1,0 +1,116 @@
+services:
+  # Database: PostgreSQL (Native ARM)
+  postgres:
+    image: postgres:15-alpine
+    container_name: cdp-postgres
+    environment:
+      POSTGRES_DB: cdp_customer
+      POSTGRES_USER: cdp_app
+      POSTGRES_PASSWORD: local_dev_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Database UI: pgAdmin (Native ARM)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: cdp-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+
+  # Cache: Redis (Native ARM)
+  redis:
+    image: redis:7-alpine
+    container_name: cdp-redis
+    ports:
+      - "6379:6379"
+
+  # Streaming: Redpanda (Optimized for Apple Silicon)
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v23.3.1
+    container_name: cdp-redpanda
+    command:
+      - redpanda start
+      - --smp 1
+      - --overprovisioned
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://cdp-redpanda:9092,external://localhost:19092
+      # Ensure auto-creation is enabled for internal topics
+      - --set redpanda.auto_create_topics_enabled=true 
+    ports:
+      - "19092:19092"
+      - "9092:9092"
+
+  # Schema Registry (Native ARM)
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.0
+    container_name: cdp-schema-registry
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'cdp-redpanda:9092'
+      SCHEMA_REGISTRY_HOST_NAME: cdp-schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    depends_on:
+      - redpanda
+
+  # BigQuery Emulator (Native ARM64 via Recidiviz)
+  bq-emulator:
+    image: ghcr.io/recidiviz/bigquery-emulator:latest
+    container_name: cdp-bq-emulator
+    ports:
+      - "9050:9050"
+      - "9060:9060"
+    command: ["--project", "test-project"]
+
+  # Kafka Connect (Native ARM)
+  connect:
+    image: confluentinc/cp-kafka-connect:7.6.0
+    container_name: cdp-connect
+    user: root
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'cdp-redpanda:9092'
+      CONNECT_REST_ADVERTISED_HOST_NAME: cdp-connect
+      CONNECT_GROUP_ID: cdp-connect-group
+      # Reduced replication factor to 1 (crucial for single-node development)
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_CONFIG_STORAGE_TOPIC: _connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: _connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: _connect-status
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://cdp-schema-registry:8081
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      KAFKA_HEAP_OPTS: "-Xms512M -Xmx2G"
+    command: 
+      - /bin/bash
+      - -c 
+      - |
+        confluent-hub install --no-prompt confluentinc/kafka-connect-bigquery:2.4.1
+        /etc/confluent/docker/run
+    depends_on:
+      - redpanda
+      - schema-registry
+
+  # Kafka UI (Native ARM)
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: cdp-kafka-ui
+    ports:
+      - "8082:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: cdp-redpanda:9092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://cdp-schema-registry:8081
+    depends_on:
+      - redpanda

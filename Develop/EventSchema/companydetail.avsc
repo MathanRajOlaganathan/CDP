@@ -1,0 +1,14 @@
+{
+  "type": "record",
+  "name": "CompanyDetail",
+  "namespace": "cdp.company",
+  "fields": [
+    { "name": "customerId", "type": "string" },
+    { "name": "legalName", "type": "string" },
+    { "name": "registrationNumber", "type": "string" },
+    { "name": "incorporationDate", "type": ["null", "string"], "default": null },
+    { "name": "industry", "type": ["null", "string"], "default": null },
+    { "name": "taxId", "type": ["null", "string"], "default": null },
+    { "name": "employeeCount", "type": ["null", "int"], "default": null }
+  ]
+}
