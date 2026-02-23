@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20240522-02
+      author: CDSL-002
+      changes:
+        - createTable:
+            tableName: address
+            columns:
+              - column:
+                  name: address_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+              - column:
+                  name: line1
+                  type: varchar(255)
+              - column:
+                  name: line2
+                  type: varchar(255)
+              - column:
+                  name: city
+                  type: varchar(255)
+              - column:
+                  name: state
+                  type: varchar(255)
+              - column:
+                  name: country
+                  type: varchar(255)
+              - column:
+                  name: postal_code
+                  type: varchar(255)
+              - column:
+                  name: is_primary
+                  type: boolean
+        - addForeignKeyConstraint:
+            baseTableName: address
+            baseColumnNames: customer_id
+            constraintName: fk_address_customer
+            referencedTableName: customer
+            referencedColumnNames: customer_id

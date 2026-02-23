@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20240522-07
+      author: CDSL-007
+      changes:
+        - createTable:
+            tableName: portfolio
+            columns:
+              - column:
+                  name: portfolio_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: portfolio_type
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: varchar(255)
+              - column:
+                  name: risk_profile
+                  type: varchar(255)
+        - addForeignKeyConstraint:
+            baseTableName: portfolio
+            baseColumnNames: customer_id
+            constraintName: fk_portfolio_customer
+            referencedTableName: customer
+            referencedColumnNames: customer_id

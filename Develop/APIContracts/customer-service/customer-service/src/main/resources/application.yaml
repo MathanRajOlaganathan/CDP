@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: customer-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cdp_customer
+    username: cdp_app
+    password: local_dev_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none  # we manage schema via Liquibase
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    contexts: development
+    default-schema: public
+
+debug: false
+server:
+  port: 9090
+
+
+

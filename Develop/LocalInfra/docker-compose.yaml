@@ -1,21 +1,32 @@
+version: "3.9"
+
 services:
-  # Database: PostgreSQL (Native ARM)
+
+  # ==============================
+  # PostgreSQL (System of Record)
+  # ==============================
   postgres:
     image: postgres:15-alpine
     container_name: cdp-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: cdp_customer
       POSTGRES_USER: cdp_app
       POSTGRES_PASSWORD: local_dev_password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_DB: cdp_customer
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cdp-network
 
-  # Database UI: pgAdmin (Native ARM)
+  # ==============================
+  # pgAdmin (DB UI)
+  # ==============================
   pgadmin:
     image: dpage/pgadmin4
     container_name: cdp-pgadmin
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -23,34 +34,50 @@ services:
       - "8080:80"
     depends_on:
       - postgres
+    networks:
+      - cdp-network
 
-  # Cache: Redis (Native ARM)
+  # ==============================
+  # Redis (Read Optimization)
+  # ==============================
   redis:
     image: redis:7-alpine
     container_name: cdp-redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
+    networks:
+      - cdp-network
 
-  # Streaming: Redpanda (Optimized for Apple Silicon)
+  # ==============================
+  # Redpanda (Kafka Replacement)
+  # ==============================
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:v23.3.1
     container_name: cdp-redpanda
+    restart: unless-stopped
     command:
       - redpanda start
       - --smp 1
       - --overprovisioned
       - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
       - --advertise-kafka-addr internal://cdp-redpanda:9092,external://localhost:19092
-      # Ensure auto-creation is enabled for internal topics
-      - --set redpanda.auto_create_topics_enabled=true 
+      - --set redpanda.auto_create_topics_enabled=true
     ports:
-      - "19092:19092"
-      - "9092:9092"
+      - "19092:19092"   # External access (host)
+      - "9092:9092"     # Internal container access
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    networks:
+      - cdp-network
 
-  # Schema Registry (Native ARM)
+  # ==============================
+  # Schema Registry
+  # ==============================
   schema-registry:
     image: confluentinc/cp-schema-registry:7.6.0
     container_name: cdp-schema-registry
+    restart: unless-stopped
     ports:
       - "8081:8081"
     environment:
@@ -59,20 +86,30 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
     depends_on:
       - redpanda
+    networks:
+      - cdp-network
 
-  # BigQuery Emulator (Native ARM64 via Recidiviz)
+  # ==============================
+  # BigQuery Emulator
+  # ==============================
   bq-emulator:
     image: ghcr.io/recidiviz/bigquery-emulator:latest
     container_name: cdp-bq-emulator
+    restart: unless-stopped
     ports:
       - "9050:9050"
       - "9060:9060"
     command: ["--project", "test-project"]
+    networks:
+      - cdp-network
 
-  # Kafka Connect (Native ARM)
+  # ==============================
+  # Kafka Connect
+  # ==============================
   connect:
     image: confluentinc/cp-kafka-connect:7.6.0
     container_name: cdp-connect
+    restart: unless-stopped
     user: root
     ports:
       - "8083:8083"
@@ -80,32 +117,42 @@ services:
       CONNECT_BOOTSTRAP_SERVERS: 'cdp-redpanda:9092'
       CONNECT_REST_ADVERTISED_HOST_NAME: cdp-connect
       CONNECT_GROUP_ID: cdp-connect-group
-      # Reduced replication factor to 1 (crucial for single-node development)
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+
       CONNECT_CONFIG_STORAGE_TOPIC: _connect-configs
       CONNECT_OFFSET_STORAGE_TOPIC: _connect-offsets
       CONNECT_STATUS_STORAGE_TOPIC: _connect-status
+
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://cdp-schema-registry:8081
+
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+
       KAFKA_HEAP_OPTS: "-Xms512M -Xmx2G"
-    command: 
+
+    command:
       - /bin/bash
-      - -c 
+      - -c
       - |
         confluent-hub install --no-prompt confluentinc/kafka-connect-bigquery:2.4.1
         /etc/confluent/docker/run
     depends_on:
       - redpanda
       - schema-registry
+    networks:
+      - cdp-network
 
-  # Kafka UI (Native ARM)
+  # ==============================
+  # Kafka UI
+  # ==============================
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: cdp-kafka-ui
+    restart: unless-stopped
     ports:
       - "8082:8080"
     environment:
@@ -114,3 +161,19 @@ services:
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://cdp-schema-registry:8081
     depends_on:
       - redpanda
+    networks:
+      - cdp-network
+
+# ==============================
+# Networks
+# ==============================
+networks:
+  cdp-network:
+    driver: bridge
+
+# ==============================
+# Volumes
+# ==============================
+volumes:
+  postgres_data:
+  redpanda_data:

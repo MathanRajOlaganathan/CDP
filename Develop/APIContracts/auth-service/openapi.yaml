@@ -1,454 +1,91 @@
 openapi: 3.0.3
 info:
-  title: Customer Service API
+  title: Auth Service API
   version: 1.0.0
-  description: REST API for managing customers and their related entities.
+  description: Authentication and token management.
 
 servers:
-  - url: http://localhost:8080
-    description: Local
+  - url: http://localhost:8082
 
 paths:
 
-  # -------------------------
-  # CUSTOMER
-  # -------------------------
-  /customers:
+  /auth/login:
     post:
-      summary: Create a new customer
-      operationId: createCustomer
+      summary: Login and obtain tokens
+      operationId: login
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerRequest'
-      responses:
-        '201':
-          description: Customer created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-
-    get:
-      summary: List customers
-      operationId: listCustomers
-      parameters:
-        - in: query
-          name: customerType
-          schema:
-            $ref: '#/components/schemas/CustomerType'
-        - in: query
-          name: page
-          schema:
-            type: integer
-            minimum: 0
-        - in: query
-          name: size
-          schema:
-            type: integer
-            minimum: 1
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          description: List of customers
+          description: Tokens issued
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/LoginResponse'
 
-  /customers/{customerId}:
-    get:
-      summary: Get customer by ID
-      operationId: getCustomer
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      responses:
-        '200':
-          description: Customer found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '404':
-          description: Customer not found
-
-    patch:
-      summary: Archive or update customer
-      operationId: updateCustomer
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateCustomerRequest'
-      responses:
-        '200':
-          description: Customer updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-
-  # -------------------------
-  # PERSON DETAIL
-  # -------------------------
-  /customers/{customerId}/person:
-    put:
-      summary: Create or update person detail
-      operationId: upsertPersonDetail
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PersonDetail'
-      responses:
-        '200':
-          description: Person detail updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PersonDetail'
-
-    get:
-      summary: Get person detail
-      operationId: getPersonDetail
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      responses:
-        '200':
-          description: Person detail
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PersonDetail'
-
-  # -------------------------
-  # COMPANY DETAIL
-  # -------------------------
-  /customers/{customerId}/company:
-    put:
-      summary: Create or update company detail
-      operationId: upsertCompanyDetail
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CompanyDetail'
-      responses:
-        '200':
-          description: Company detail updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CompanyDetail'
-
-    get:
-      summary: Get company detail
-      operationId: getCompanyDetail
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      responses:
-        '200':
-          description: Company detail
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CompanyDetail'
-
-  # -------------------------
-  # ADDRESSES
-  # -------------------------
-  /customers/{customerId}/addresses:
+  /auth/refresh:
     post:
-      summary: Add address
-      operationId: addAddress
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
+      summary: Refresh access token
+      operationId: refreshToken
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAddressRequest'
-      responses:
-        '201':
-          description: Address created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Address'
-
-    get:
-      summary: List addresses
-      operationId: listAddresses
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
+              $ref: '#/components/schemas/RefreshRequest'
       responses:
         '200':
-          description: List of addresses
+          description: Token refreshed
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Address'
+                $ref: '#/components/schemas/LoginResponse'
 
-  # -------------------------
-  # CONTACTS
-  # -------------------------
-  /customers/{customerId}/contacts:
+  /auth/validate:
     post:
-      summary: Add contact detail
-      operationId: addContact
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
+      summary: Validate token
+      operationId: validateToken
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateContactRequest'
-      responses:
-        '201':
-          description: Contact created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactDetail'
-
-    get:
-      summary: List contacts
-      operationId: listContacts
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
+              $ref: '#/components/schemas/ValidateRequest'
       responses:
         '200':
-          description: List of contacts
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ContactDetail'
-
-  # -------------------------
-  # KYC
-  # -------------------------
-  /customers/{customerId}/kyc:
-    put:
-      summary: Create or update KYC
-      operationId: upsertKyc
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Kyc'
-      responses:
-        '200':
-          description: KYC updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Kyc'
-
-    get:
-      summary: Get KYC
-      operationId: getKyc
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      responses:
-        '200':
-          description: KYC detail
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Kyc'
-
-  # -------------------------
-  # PORTFOLIO
-  # -------------------------
-  /customers/{customerId}/portfolios:
-    post:
-      summary: Add portfolio
-      operationId: addPortfolio
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePortfolioRequest'
-      responses:
-        '201':
-          description: Portfolio created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Portfolio'
-
-    get:
-      summary: List portfolios
-      operationId: listPortfolios
-      parameters:
-        - $ref: '#/components/parameters/CustomerId'
-      responses:
-        '200':
-          description: List of portfolios
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Portfolio'
+          description: Token valid
+        '401':
+          description: Token invalid
 
 components:
-
-  parameters:
-    CustomerId:
-      in: path
-      name: customerId
-      required: true
-      schema:
-        type: string
-        format: uuid
-
   schemas:
 
-    CustomerType:
-      type: string
-      enum: [PERSON, COMPANY]
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username: { type: string }
+        password: { type: string }
 
-    Customer:
+    LoginResponse:
       type: object
       properties:
-        customerId:
-          type: string
-          format: uuid
-        customerType:
-          $ref: '#/components/schemas/CustomerType'
-        isArchived:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        expiresIn: { type: integer }
 
-    CreateCustomerRequest:
+    RefreshRequest:
       type: object
-      required: [customerType]
+      required: [refreshToken]
       properties:
-        customerType:
-          $ref: '#/components/schemas/CustomerType'
+        refreshToken: { type: string }
 
-    UpdateCustomerRequest:
+    ValidateRequest:
       type: object
+      required: [token]
       properties:
-        isArchived:
-          type: boolean
-
-    PersonDetail:
-      type: object
-      properties:
-        firstName: { type: string }
-        lastName: { type: string }
-        dateOfBirth: { type: string, format: date }
-        nationalId: { type: string }
-        gender: { type: string }
-        citizenship: { type: string }
-
-    CompanyDetail:
-      type: object
-      properties:
-        legalName: { type: string }
-        registrationNumber: { type: string }
-        incorporationDate: { type: string, format: date }
-        industry: { type: string }
-        taxId: { type: string }
-        employeeCount: { type: integer }
-
-    Address:
-      type: object
-      properties:
-        addressId: { type: string, format: uuid }
-        type: { type: string }
-        line1: { type: string }
-        line2: { type: string }
-        city: { type: string }
-        state: { type: string }
-        country: { type: string }
-        postalCode: { type: string }
-        isPrimary: { type: boolean }
-
-    CreateAddressRequest:
-      type: object
-      required: [type, line1, city, country]
-      properties:
-        type: { type: string }
-        line1: { type: string }
-        line2: { type: string }
-        city: { type: string }
-        state: { type: string }
-        country: { type: string }
-        postalCode: { type: string }
-        isPrimary: { type: boolean }
-
-    ContactDetail:
-      type: object
-      properties:
-        contactId: { type: string, format: uuid }
-        type: { type: string }
-        value: { type: string }
-        isPrimary: { type: boolean }
-        isVerified: { type: boolean }
-
-    CreateContactRequest:
-      type: object
-      required: [type, value]
-      properties:
-        type: { type: string }
-        value: { type: string }
-        isPrimary: { type: boolean }
-
-    Kyc:
-      type: object
-      properties:
-        kycLevel: { type: string }
-        status: { type: string }
-        lastVerifiedAt: { type: string, format: date-time }
-        remarks: { type: string }
-
-    Portfolio:
-      type: object
-      properties:
-        portfolioId: { type: string, format: uuid }
-        portfolioType: { type: string }
-        status: { type: string }
-        riskProfile: { type: string }
-
-    CreatePortfolioRequest:
-      type: object
-      required: [portfolioType]
-      properties:
-        portfolioType: { type: string }
-        status: { type: string }
-        riskProfile: { type: string }
+        token: { type: string }

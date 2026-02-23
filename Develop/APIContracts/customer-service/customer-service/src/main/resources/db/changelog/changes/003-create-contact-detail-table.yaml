@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20240522-03
+      author: CDSL-003
+      changes:
+        - createTable:
+            tableName: contact_detail
+            columns:
+              - column:
+                  name: contact_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+              - column:
+                  name: value
+                  type: varchar(255)
+              - column:
+                  name: is_primary
+                  type: boolean
+              - column:
+                  name: is_verified
+                  type: boolean
+        - addForeignKeyConstraint:
+            baseTableName: contact_detail
+            baseColumnNames: customer_id
+            constraintName: fk_contact_detail_customer
+            referencedTableName: customer
+            referencedColumnNames: customer_id

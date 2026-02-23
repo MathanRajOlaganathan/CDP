@@ -2,3 +2,10 @@
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
+*.xml
+/.slingshot
+Develop/APIContracts/.DS_Store
+Develop/APIContracts/customer-service/customer-service/.DS_Store
+*.cmd
+Develop/APIContracts/customer-service/customer-service/mvnw
+Develop/APIContracts/customer-service/customer-service/.mvn/wrapper/maven-wrapper.properties

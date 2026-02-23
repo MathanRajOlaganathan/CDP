@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20240522-04
+      author: CDSL-004
+      changes:
+        - createTable:
+            tableName: person_detail
+            columns:
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+              - column:
+                  name: last_name
+                  type: varchar(255)
+              - column:
+                  name: date_of_birth
+                  type: date
+              - column:
+                  name: national_id
+                  type: varchar(255)
+              - column:
+                  name: gender
+                  type: varchar(255)
+              - column:
+                  name: citizenship
+                  type: varchar(255)
+        - addForeignKeyConstraint:
+            baseTableName: person_detail
+            baseColumnNames: customer_id
+            constraintName: fk_person_detail_customer
+            referencedTableName: customer
+            referencedColumnNames: customer_id

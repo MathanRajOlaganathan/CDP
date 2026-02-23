@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20240522-06
+      author: CDSL-006
+      changes:
+        - createTable:
+            tableName: kyc
+            columns:
+              - column:
+                  name: customer_id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: kyc_level
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: varchar(255)
+              - column:
+                  name: last_verified_at
+                  type: datetime
+              - column:
+                  name: remarks
+                  type: varchar(255)
+        - addForeignKeyConstraint:
+            baseTableName: kyc
+            baseColumnNames: customer_id
+            constraintName: fk_kyc_customer
+            referencedTableName: customer
+            referencedColumnNames: customer_id
